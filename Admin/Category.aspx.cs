@@ -16,7 +16,7 @@ namespace Ecommerce.Admin
 
         protected void btnAddOrUpdate_click(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void btnClear_click(object sender, EventArgs e)
