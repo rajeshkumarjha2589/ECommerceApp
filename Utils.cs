@@ -19,7 +19,7 @@ namespace Ecommerce
 
         public static string getConnection()
         {
-            return ConfigurationManager.ConnectionStrings["cs"].ConnectionString
+            return ConfigurationManager.ConnectionStrings["cs"].ConnectionString;
         }
 
         public static bool isValidExtention(string fileName)

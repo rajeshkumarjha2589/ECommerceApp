@@ -26,7 +26,7 @@ namespace Ecommerce.Admin
         {
             string actionName = string.Empty, imagePath = string.Empty, fileExtension = string.Empty;
             bool isValidToExecute = false;
-            int categoryId = Convert.ToInt32(hfCategoryId);
+            int categoryId = Convert.ToInt32(hfCategoryId.Value);
             con = new SqlConnection(Utils.getConnection());
             cmd = new SqlCommand("Category_curd",con);
             cmd.Parameters.AddWithValue("@Action", categoryId == 0 ? "INSERT" : "UPDATE");
