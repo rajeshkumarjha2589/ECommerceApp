@@ -1,0 +1,132 @@
+create table  Category
+(
+	CategoryId int identity(1,1) not null primary key,
+	CategoryName varchar(100) not null,
+	CategoryImageUrl varchar(max) not null,
+	IsActive bit not null,
+	CreatedDate datetime not null
+)
+drop table Category
+
+
+create table  SubCategory
+(
+	SubCategoryId int identity(1,1) not null primary key,
+	SubCategoryName varchar(100) not null,
+	CategoryId int foreign key references Category(CategoryId) on delete cascade not null,
+	IsActive bit not null,
+	CreatedDate datetime not null
+)
+
+create table Product
+(
+	ProductId int primary key identity(1,1),
+	ProductName varchar(100) not null,
+	ProductDescription varchar(200) not null,
+	LongDescription varchar(max) not null,
+	AdditionalDescription varchar(max)null,
+	Price Decimal(18,2)not null,
+	Quantity int not null,
+	Size varchar(100) null,
+	Color varchar(50) null,
+	CompanyName varchar(100) null,
+	CategoryId int foreign key references Category(CategoryId) on delete cascade not null,
+	SubCategoryId int not null,
+	Sold int null,
+	IsCustomized  bit not null,
+	IsActive bit not null,
+	CreatedDate datetime not null
+)
+
+create table ProductImages
+(
+	ImageId int primary key identity(1,1) not null,
+	ImageUrl varchar(max) null,
+	ProductId int foreign key references Product(ProductId) on delete cascade not null,
+	DefaultImage bit null
+)
+
+create table Roles
+(
+	RoleId int primary key ,
+	RoleName varchar(50) not null
+)
+Insert into Roles values(1,'Admin')
+Insert into Roles values(2,'Customer')
+Insert into Roles values(3,'Default')
+
+
+create table Users
+(
+	UserId int primary key identity(1,1),
+	Name varchar(50) null,
+	UserName varchar(50) not null unique,
+	Mobile varchar(20) null,
+	EmailId varchar(50) null,
+	Address varchar(max) null,
+	PostCode varchar(50) null,
+	Password varchar(50) null,
+	ImageUrl varchar(max) null,
+	RoleId int foreign key references Roles(RoleId)on delete cascade not null,
+	CreadtedDate datetime not null,
+ )
+ create table ProductReview
+ (
+	ReviewId int primary key identity(1,1),
+	Rating int not null,
+	Comment varchar(max)null,
+	ProductId int Foreign Key references Product(ProductId) on delete cascade not null,
+	UserId int Foreign Key references Users(UserId) on delete cascade not null,
+	CreatedDate datetime
+ )
+
+ create table Wishlist
+ (
+	WishlistId int primary key identity(1,1),
+	ProductId int Foreign Key references Product(ProductId) on delete cascade not null,
+	UserId int Foreign Key references Users(UserId) on delete cascade not null,
+	CreateDate datetime not null
+ )
+ create table Cart
+ (
+ CartId int primary key identity(1,1) not null,
+ ProductId int Foreign Key references Product(ProductId) on delete cascade not null,
+ Quantity int null,
+ UserId int Foreign Key references Users(UserId) on delete cascade not null,
+ CreatedDate datetime not null
+ )  
+
+
+ create table Contact
+ (
+	ContactId int primary key identity(1,1),
+	Name varchar(50) not null,
+	Email varchar(50) not null,
+	Subject varchar(200) null,
+	Message varchar(max) null,
+	CreatedDate datetime not null
+ )
+
+ create table Payment
+ (
+	PaymentId int primary key identity(1,1),
+	Name varchar(50) null,
+	CardNo varchar(50) null,
+	ExpiryDate varchar(50) null,
+	CvvNo int null,
+	Address varchar(max) null,
+	PaymentMode varchar(50) null
+ )
+
+create table Orders
+(
+	OrderDetailId int primary key identity(1,1),
+	OrderNo varchar(max) null,
+	ProductId int foreign key references Product(ProductId) on delete cascade not null,
+	Quantity int null,
+	UserId int foreign key references Users(UserId) on delete cascade not null,
+	Status varchar(50) null,
+	PaymentId int foreign key references Payment(PaymentId) on delete cascade not null,
+	Orderdate datetime not null,
+	IsCancle bit not null default 0
+)

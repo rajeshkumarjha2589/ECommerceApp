@@ -1,0 +1,63 @@
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE Category_curd
+	-- Add the parameters for the stored procedure here
+	@Action varchar(15),
+	@CategoryId int = null,
+	@CategoryName varchar(100) = null,
+	@categoryImageUrl varchar(max) = null,
+	@IsActive bit = FALSE
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	-- GET all CAtegory
+	IF (@Action = 'GETALL')
+	BEGIN 
+		SELECT * FROM Category
+	END
+	-- INSERT CAtegory
+	IF (@Action = 'INSERT')
+	BEGIN 
+		INSERT INTO Category(CategoryName,CategoryImageUrl,IsActive,CreatedDate)
+		VALUES(@CategoryName, @categoryImageUrl, @IsActive, GETDATE())
+	END
+	-- UPDATE CAtegory
+	IF (@Action = 'UPDATE')
+	BEGIN 
+		DECLARE @UPDATE_IMAGE VARCHAR(20)
+		SELECT @UPDATE_IMAGE =(CASE WHEN @categoryImageUrl IS NULL THEN 'NO' ELSE 'YES' END)
+		IF (@UPDATE_IMAGE= 'NO')
+			BEGIN 
+				UPDATE Category
+				SET CategoryName=@CategoryName, IsActive=@IsActive
+				WHERE CategoryId = @CategoryId
+			END
+		ELSE
+			BEGIN
+				UPDATE Category
+				SET CategoryName=@CategoryName, IsActive=@IsActive,CategoryImageUrl=@categoryImageUrl
+				WHERE CategoryId = @CategoryId
+			END
+	END	
+	-- DELETE Category
+	IF (@Action= 'DELETE')
+	BEGIN
+		DELETE FROM Category WHERE CategoryId=@CategoryId
+	END
+
+	-- GET Active category by categoryId
+	-- DELETE Category
+	IF (@Action= 'ACTIVECATEGORY')
+	BEGIN
+		SELECT * FROM Category C WHERE C.IsActive = 1 ORDER BY C.CategoryName
+	END
+END
+GO
